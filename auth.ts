@@ -6,6 +6,7 @@ import { loginSchema } from "@/lib/validations/authSchema"
 import { PrismaAdapter } from "@next-auth/prisma-adapter"
 import GoogleProvider from "next-auth/providers/google"
 import { prisma } from "@/lib/prisma"
+import  Image  from 'next/image';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),  // ← เพิ่ม Adapter
@@ -56,7 +57,7 @@ export const authOptions: NextAuthOptions = {
       if(account?.provider === "google" && profile) {
         token.name = profile.name
         token.email = profile.email
-        token.picture = (profile as any).picture
+        token.image = (profile as any).image
       }
       return token
     },

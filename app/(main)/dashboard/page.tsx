@@ -1,13 +1,14 @@
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/auth"
-import { redirect } from "next/navigation"
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/auth";
+import { redirect } from "next/navigation";
+import LogoutButton from "./LogoutButton";
 
 export default async function DashboardPage() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
 
   // ถ้าไม่ได้ Login → Redirect ไปหน้า Login
   if (!session) {
-    redirect("/login")
+    redirect("/login");
   }
 
   return (
@@ -15,15 +16,23 @@ export default async function DashboardPage() {
       <h1 className="text-3xl font-bold mb-4">📊 Dashboard</h1>
 
       <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-xl font-semibold mb-4">ข้อมูล Session (Server-side)</h2>
+        <h2 className="text-xl font-semibold mb-4">
+          ข้อมูล Session (Server-side)
+        </h2>
 
         <div className="space-y-2">
-          <p>👤 ชื่อ: <strong>{session.user?.name}</strong></p>
-          <p>📧 อีเมล: <strong>{session.user?.email}</strong></p>
-          <p>🔑 Role: <strong>{(session.user as any)?.role || "user"}</strong></p>
+          <p>
+            👤 ชื่อ: <strong>{session.user?.name}</strong>
+          </p>
+          <p>
+            📧 อีเมล: <strong>{session.user?.email}</strong>
+          </p>
+          <p>
+            🔑 Role: <strong>{(session.user as any)?.role || "user"}</strong>
+          </p>
         </div>
 
-        {session.user?.image && (
+        {session?.user?.image && (
           <img
             src={session.user.image}
             alt="Profile"
@@ -32,16 +41,8 @@ export default async function DashboardPage() {
             className="rounded-full mt-4"
           />
         )}
-
-        <div className="mt-6">
-          <a
-            href="/api/auth/signout"
-            className="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 inline-block"
-          >
-            🚪 ออกจากระบบ
-          </a>
-        </div>
+        <LogoutButton />
       </div>
     </div>
-  )
+  );
 }
